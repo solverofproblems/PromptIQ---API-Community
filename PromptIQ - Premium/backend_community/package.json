@@ -1,0 +1,20 @@
+{
+  "name": "api_comunitaria",
+  "version": "1.0.0",
+  "description": "PromptIQ Community Backend - Usando Cerebras AI",
+  "main": "script.js",
+  "type": "module",
+  "scripts": {
+    "start": "node script.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["prompt", "ai", "analysis", "cerebras"],
+  "author": "Messier Data & Creative",
+  "license": "ISC",
+  "dependencies": {
+    "@cerebras/cerebras_cloud_sdk": "^1.56.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "cors": "^2.8.5"
+  }
+}
