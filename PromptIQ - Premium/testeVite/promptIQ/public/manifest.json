@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "PromptIQ - Versão Premium",
+  "version": "1.0.0",
+  "description": "Análise completa de prompts para IA com IA - Versão premium",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "PromptIQ - Versão Premium (Análise Completa)"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["content.js", "floating-window.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

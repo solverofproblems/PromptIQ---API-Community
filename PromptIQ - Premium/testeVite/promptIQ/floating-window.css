@@ -1,0 +1,333 @@
+/* Janela flutuante do PromptIQ */
+#promptiq-floating-window {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  max-height: 600px;
+  background: linear-gradient(180deg, #1f1f1f, #3b3b3b, #1f1f1f);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  font-family: "Montserrat", sans-serif;
+  color: #fff;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid #0892ad;
+}
+
+#promptiq-floating-window.minimized {
+  height: 60px;
+  max-height: 60px;
+}
+
+#promptiq-floating-window.minimized .promptiq-content {
+  display: none;
+}
+
+/* Header da janela */
+.promptiq-header {
+  background: linear-gradient(180deg, #181818, #2f2f2f, #181818);
+  padding: 15px 20px;
+  border-bottom: 1px solid #0892ad;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  user-select: none;
+}
+
+.promptiq-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.promptiq-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.promptiq-title {
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+  color: #e6e6e6;
+}
+
+.promptiq-subtitle {
+  font-size: 12px;
+  color: #d8d8d8;
+  margin: 0;
+  font-weight: 300;
+}
+
+.promptiq-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.promptiq-btn {
+  background: none;
+  border: none;
+  color: #e6e6e6;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.promptiq-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Conteúdo da janela */
+.promptiq-content {
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Estilos do prompt do usuário */
+.promptiq-text-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.promptiq-text-display {
+  padding: 15px 20px;
+  border-radius: 10px;
+  color: #fff;
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  font-weight: 600;
+  background: linear-gradient(180deg, #0892ad, #0fd6ff, #0892ad);
+  box-shadow: 0 4px 12px rgba(8, 146, 173, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.promptiq-text-display:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(8, 146, 173, 0.6);
+}
+
+.promptiq-analyze-btn {
+  padding: 10px 25px;
+  background: linear-gradient(180deg, #0cb5dc, #0fd6ff, #0cb5dc);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 0 14px rgba(0, 180, 220, 0.5);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.promptiq-analyze-btn:hover {
+  background: linear-gradient(180deg, #ffc20b, #ffe154, #ffc20b);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Área de resultados */
+.promptiq-results {
+  margin-top: 20px;
+}
+
+.promptiq-container-fix {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: linear-gradient(180deg, #2a2a2a, #404040, #2a2a2a);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Seções de resultados */
+.promptiq-section h1 {
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+}
+
+.promptiq-section p {
+  font-family: "Montserrat", sans-serif;
+  color: white;
+  line-height: 1.4;
+  font-size: 12px;
+}
+
+/* Cards internos */
+.promptiq-card {
+  background: linear-gradient(180deg, #4b4b4b, #6a6a6a, #4b4b4b);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Topics */
+.promptiq-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: linear-gradient(180deg, #4b4b4b, #6a6a6a, #4b4b4b);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.promptiq-positive-topics {
+  background: linear-gradient(180deg, rgba(0, 200, 0, 0.5), rgba(0, 150, 0, 0.3));
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 200, 0, 0.3);
+}
+
+.promptiq-negative-topics {
+  background: linear-gradient(180deg, rgba(200, 0, 0, 0.5), rgba(150, 0, 0, 0.3));
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(200, 0, 0, 0.3);
+}
+
+/* Prompt melhorado */
+.promptiq-prompt-improved {
+  position: relative;
+  background: linear-gradient(180deg, #4b4b4b, #6a6a6a, #4b4b4b);
+  border-radius: 10px;
+  padding: 15px;
+  padding-right: 50px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.promptiq-copy-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #4e4e4e, #383838);
+  border: 1px solid #1f1f1f;
+  box-shadow: 0 0 4px rgba(29, 29, 29, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.promptiq-copy-btn:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.promptiq-copy-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Pontuação */
+.promptiq-score {
+  text-align: center;
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 10px 0;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+/* Mensagem de erro */
+.promptiq-error {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(200, 0, 0, 0.8), rgba(241, 1, 1, 0.8));
+  box-shadow: 0 2px 8px rgba(200, 0, 0, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.promptiq-error:hover {
+  transform: translateY(-2px);
+}
+
+/* Scrollbar personalizada */
+.promptiq-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.promptiq-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+.promptiq-content::-webkit-scrollbar-thumb {
+  background: #0892ad;
+  border-radius: 3px;
+}
+
+.promptiq-content::-webkit-scrollbar-thumb:hover {
+  background: #0fd6ff;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  #promptiq-floating-window {
+    width: calc(100vw - 40px);
+    right: 20px;
+    left: 20px;
+  }
+}
+
+/* Animações */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+#promptiq-floating-window {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Notificação de cópia */
+.promptiq-copy-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #4CAF50, #45a049);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  z-index: 10001;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.promptiq-copy-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
