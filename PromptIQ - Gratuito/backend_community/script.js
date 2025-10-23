@@ -1,4 +1,4 @@
-import Cerebras from '@cerebras/cerebras_cloud_sdk';
+import Cerebras from '@cerebras/cerebras_cloud_sdk/index.mjs';
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
