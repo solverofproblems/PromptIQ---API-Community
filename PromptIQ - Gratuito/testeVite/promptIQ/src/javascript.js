@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   //Aqui estamos levando um breve resuminho do prompt.
                   document.getElementById('resumo').innerText = respostaAi.resumo;
 
-                  //Aqui é a sessão que exibe a pontuação inteligente do Cerebras
+                  //Aqui é a sessão que exibe a pontuação inteligente do OpenRouter
                   const aiScore = respostaAi.pontuacao.nota;
                   const aiComment = respostaAi.pontuacao.comentario;
                   
@@ -219,6 +219,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 }
               }, remainingTime); // Fechar o setTimeout
+            })
+            .catch(function (error) {
+              // Limpar intervalo das mensagens
+              clearInterval(messageInterval);
+              
+              // Verificar se é erro de limite da API
+              if (error.response && error.response.status === 429 && error.response.data.error === 'LIMIT_REACHED') {
+                const retryAfter = error.response.data.retryAfter || 300;
+                const minutes = Math.ceil(retryAfter / 60);
+                
+                areaInfo.innerHTML = `
+                  <div class="limit-reached-container">
+                    <div class="limit-reached-icon">🚫</div>
+                    <h1 class="limit-reached-title">Limite da API Atingido</h1>
+                    <p class="limit-reached-message">A API comunitária atingiu seu limite de uso.</p>
+                    <p class="limit-reached-details">Aguarde ${minutes} minutos antes de tentar novamente.</p>
+                    <div class="limit-reached-info">
+                      <p>💡 <strong>Dica:</strong> APIs comunitárias têm limites para manter o serviço gratuito para todos.</p>
+                    </div>
+                    <div class="limit-reached-retry">
+                      <button class="retry-button" onclick="location.reload()">Tentar Novamente</button>
+                    </div>
+                  </div>
+                `;
+              } else {
+                // Outros erros
+                areaInfo.innerHTML = `
+                  <div class="error-container">
+                    <div class="error-icon">❌</div>
+                    <h1 class="error-title">Erro na Análise</h1>
+                    <p class="error-message">Ocorreu um erro ao analisar o prompt.</p>
+                    <p class="error-details">Verifique se o backend está rodando corretamente.</p>
+                  </div>
+                `;
+              }
             });
 
         })

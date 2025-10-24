@@ -568,6 +568,117 @@ class PromptIQFloatingWindow {
           transform: translateY(0);
         }
       }
+
+      /* Estilos para limite da API atingido na janela flutuante */
+      .promptiq-limit-reached-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: linear-gradient(180deg, #1f1f1f, #3b3b3b, #1f1f1f);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        text-align: center;
+        margin: 1rem auto;
+        animation: promptiqLimitFadeIn 0.5s ease-in-out;
+      }
+
+      .promptiq-limit-reached-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: promptiqLimitPulse 2s ease-in-out infinite;
+      }
+
+      .promptiq-limit-reached-title {
+        font-family: "Zalando Sans SemiExpanded", sans-serif;
+        color: #ff6b6b;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+      }
+
+      .promptiq-limit-reached-message {
+        font-family: "Montserrat", sans-serif;
+        color: #e6e6e6;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .promptiq-limit-reached-details {
+        font-family: "Montserrat", sans-serif;
+        color: #ffc20b;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .promptiq-limit-reached-info {
+        background: linear-gradient(180deg, #4b4b4b, #6a6a6a, #4b4b4b);
+        border-radius: 8px;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border-left: 3px solid #ffc20b;
+      }
+
+      .promptiq-limit-reached-info p {
+        font-family: "Montserrat", sans-serif;
+        color: #e6e6e6;
+        font-size: 0.8rem;
+        margin: 0;
+        line-height: 1.3;
+      }
+
+      .promptiq-limit-reached-retry {
+        margin-top: 0.5rem;
+      }
+
+      .promptiq-retry-button {
+        background: linear-gradient(180deg, #ff6b6b, #ff5252, #ff6b6b);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 6px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+      }
+
+      .promptiq-retry-button:hover {
+        background: linear-gradient(180deg, #ff5252, #ff1744, #ff5252);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 107, 107, 0.6);
+      }
+
+      .promptiq-retry-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+      }
+
+      @keyframes promptiqLimitFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes promptiqLimitPulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
     `;
     
     document.head.appendChild(style);
@@ -923,7 +1034,7 @@ class PromptIQFloatingWindow {
         }
       }, 500);
 
-      // Fazer requisição para o backend community
+      // Fazer requisição para o backend OpenRouter
       const response = await fetch(`http://localhost:3000/health?parametro=${encodeURIComponent(promptText)}`);
       const data = await response.json();
 
@@ -941,11 +1052,34 @@ class PromptIQFloatingWindow {
       
     } catch (error) {
       console.error('Erro na análise:', error);
-      resultsArea.innerHTML = `
-        <div class="promptiq-error">
-          <p>Erro ao analisar o prompt. Verifique se o backend está rodando.</p>
-        </div>
-      `;
+      
+      // Verificar se é erro de limite da API
+      if (error.response && error.response.status === 429 && error.response.data.error === 'LIMIT_REACHED') {
+        const retryAfter = error.response.data.retryAfter || 300;
+        const minutes = Math.ceil(retryAfter / 60);
+        
+        resultsArea.innerHTML = `
+          <div class="promptiq-limit-reached-container">
+            <div class="promptiq-limit-reached-icon">🚫</div>
+            <h1 class="promptiq-limit-reached-title">Limite da API Atingido</h1>
+            <p class="promptiq-limit-reached-message">A API comunitária atingiu seu limite de uso.</p>
+            <p class="promptiq-limit-reached-details">Aguarde ${minutes} minutos antes de tentar novamente.</p>
+            <div class="promptiq-limit-reached-info">
+              <p>💡 <strong>Dica:</strong> APIs comunitárias têm limites para manter o serviço gratuito para todos.</p>
+            </div>
+            <div class="promptiq-limit-reached-retry">
+              <button class="promptiq-retry-button" onclick="location.reload()">Tentar Novamente</button>
+            </div>
+          </div>
+        `;
+      } else {
+        // Outros erros
+        resultsArea.innerHTML = `
+          <div class="promptiq-error">
+            <p>Erro ao analisar o prompt. Verifique se o backend está rodando.</p>
+          </div>
+        `;
+      }
     } finally {
       // Reabilitar botão
       analyzeBtn.disabled = false;
@@ -1000,15 +1134,18 @@ class PromptIQFloatingWindow {
   }
 
   populateResults(data, originalPrompt) {
-    // Usar pontuação inteligente do Cerebras
+    // Usar pontuação inteligente do OpenRouter
     const aiScore = data.pontuacao.nota;
     const aiComment = data.pontuacao.comentario;
+    const aiResumo = data.resumo;
     
     const pontuacaoElement = document.getElementById('promptiq-pontuacao');
     const comentarioElement = document.getElementById('promptiq-comentario-comparativo');
+    const resumoElement = document.getElementById('promptiq-resumo');
     
     if (pontuacaoElement) pontuacaoElement.textContent = aiScore;
     if (comentarioElement) comentarioElement.textContent = aiComment;
+    if (resumoElement) resumoElement.textContent = aiResumo;
   }
 
 

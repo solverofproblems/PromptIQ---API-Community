@@ -1,0 +1,192 @@
+/* Estilos para interface de limite da API atingido */
+
+.limit-reached-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(180deg, #1f1f1f, #3b3b3b, #1f1f1f);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: limitFadeIn 0.5s ease-in-out;
+}
+
+.limit-reached-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: limitPulse 2s ease-in-out infinite;
+}
+
+.limit-reached-title {
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  color: #ff6b6b;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
+
+.limit-reached-message {
+  font-family: "Montserrat", sans-serif;
+  color: #e6e6e6;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.limit-reached-details {
+  font-family: "Montserrat", sans-serif;
+  color: #ffc20b;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.limit-reached-info {
+  background: linear-gradient(180deg, #4b4b4b, #6a6a6a, #4b4b4b);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #ffc20b;
+}
+
+.limit-reached-info p {
+  font-family: "Montserrat", sans-serif;
+  color: #e6e6e6;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.limit-reached-retry {
+  margin-top: 1rem;
+}
+
+.retry-button {
+  background: linear-gradient(180deg, #ff6b6b, #ff5252, #ff6b6b);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.retry-button:hover {
+  background: linear-gradient(180deg, #ff5252, #ff1744, #ff5252);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.6);
+}
+
+.retry-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+}
+
+/* Estilos para outros erros */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(180deg, #1f1f1f, #3b3b3b, #1f1f1f);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: limitFadeIn 0.5s ease-in-out;
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: errorShake 0.5s ease-in-out;
+}
+
+.error-title {
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  color: #ff6b6b;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
+
+.error-message {
+  font-family: "Montserrat", sans-serif;
+  color: #e6e6e6;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.error-details {
+  font-family: "Montserrat", sans-serif;
+  color: #ffc20b;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Animações */
+@keyframes limitFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes limitPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .limit-reached-container,
+  .error-container {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+  
+  .limit-reached-title,
+  .error-title {
+    font-size: 1.5rem;
+  }
+  
+  .limit-reached-icon,
+  .error-icon {
+    font-size: 3rem;
+  }
+}
+

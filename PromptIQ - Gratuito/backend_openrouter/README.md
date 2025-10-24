@@ -1,6 +1,6 @@
-# PromptIQ Community Backend
+# PromptIQ OpenRouter Backend
 
-Backend simplificado do PromptIQ usando Cerebras AI para análise de prompts.
+Backend do PromptIQ usando OpenRouter AI com DeepSeek para análise de prompts - **API ILIMITADA**.
 
 ## 🚀 Configuração
 
@@ -12,7 +12,7 @@ npm install
 ### 2. Configurar variáveis de ambiente
 Crie um arquivo `.env` na raiz do projeto:
 ```env
-CEREBRAS_API_KEY=sua_chave_cerebras_aqui
+OPENROUTER_API=sua_chave_openrouter_aqui
 ```
 
 ### 3. Iniciar o servidor
@@ -44,7 +44,7 @@ Analisa um prompt e retorna resumo e pontuação.
 ## 🔧 Tecnologias
 
 - **Node.js** + **Express**
-- **Cerebras AI** (modelo llama3.1-8b)
+- **OpenRouter AI** (modelo deepseek/deepseek-chat-v3.1:free)
 - **CORS** para cross-origin requests
 
 ## 📊 Sistema de Pontuação Rigoroso
@@ -83,14 +83,41 @@ Analisa um prompt e retorna resumo e pontuação.
 - Tempo de resposta otimizado
 - Zero desperdício de recursos
 
-## 📝 Diferenças da versão original
+## 🔥 Vantagens da API OpenRouter
 
-- ✅ **Sem custos**: Usa Cerebras AI (gratuito)
-- ✅ **Ultra simplificado**: Apenas resumo e pontuação
-- ✅ **Mais rápido**: Menos processamento de dados
-- ✅ **Economia**: Substitui OpenAI por Cerebras
-- ✅ **Requisição simples**: Prompt direto e conciso
-- ✅ **Pontuação rigorosa**: Sistema crítico e realista (0-100)
-- ✅ **Resumo direto**: Apenas o essencial em 1 frase
-- ✅ **Máxima eficiência**: Apenas UMA requisição à API
-- ✅ **Zero desperdício**: Resumo + Pontuação em uma única chamada
+### ✅ API Ilimitada
+- **Sem limites de uso** (diferente de APIs comunitárias)
+- **Modelo DeepSeek** de alta qualidade
+- **Performance consistente** 24/7
+- **Disponibilidade garantida**
+
+### ✅ Modelo DeepSeek
+- **deepseek/deepseek-chat-v3.1:free** - Modelo gratuito
+- **Alta qualidade** de análise
+- **Respostas consistentes** e precisas
+- **Suporte completo** a português
+
+## 📝 Diferenças da Versão Community
+
+- ✅ **API ilimitada**: Sem restrições de uso
+- ✅ **Modelo premium**: DeepSeek de alta qualidade
+- ✅ **Performance superior**: Respostas mais consistentes
+- ✅ **Disponibilidade**: 24/7 sem interrupções
+- ✅ **Mesma funcionalidade**: Sistema rigoroso mantido
+
+## 🔗 Links Úteis
+
+- **OpenRouter**: https://openrouter.ai/
+- **DeepSeek**: https://www.deepseek.com/
+- **Documentação**: https://openrouter.ai/docs
+
+## 📞 Suporte
+
+Para dúvidas, sugestões ou problemas:
+- **GitHub Issues**: Abra uma issue no repositório
+- **Email**: contato@messier.com.br
+- **Website**: https://messier.com.br
+
+---
+
+**PromptIQ OpenRouter** - Análise inteligente de prompts com API ilimitada 🚀

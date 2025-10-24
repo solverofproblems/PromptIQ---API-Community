@@ -1,20 +1,19 @@
 {
-  "name": "api_comunitaria",
+  "name": "promptiq_openrouter",
   "version": "1.0.0",
-  "description": "PromptIQ Community Backend - Usando Cerebras AI",
+  "description": "PromptIQ OpenRouter Backend - API Ilimitada",
   "main": "script.js",
   "type": "module",
   "scripts": {
     "start": "node script.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["prompt", "ai", "analysis", "cerebras"],
+  "keywords": ["prompt", "ai", "analysis", "openrouter", "deepseek"],
   "author": "Messier Data & Creative",
   "license": "ISC",
   "dependencies": {
-    "@cerebras/cerebras_cloud_sdk": "^1.56.1",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "cors": "^2.8.5"
+    "express": "^5.1.0"
   }
 }
