@@ -20,7 +20,7 @@ OPENROUTER_API=sua_chave_openrouter_aqui
 npm start
 ```
 
-O servidor estará rodando em `http://localhost:3000`
+O servidor estará rodando em `https://promptiq-gratuito.onrender.com`
 
 ## 📡 Endpoints
 

@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           axios({
             method: 'get',
-            url: 'http://localhost:3000/health',
+            url: 'https://promptiq-gratuito.onrender.com/health',
             params: {
               parametro: avaliarPergunta
             }

@@ -1035,7 +1035,7 @@ class PromptIQFloatingWindow {
       }, 500);
 
       // Fazer requisição para o backend OpenRouter
-      const response = await fetch(`http://localhost:3000/health?parametro=${encodeURIComponent(promptText)}`);
+      const response = await fetch(`https://promptiq-gratuito.onrender.com/health?parametro=${encodeURIComponent(promptText)}`);
       const data = await response.json();
 
       const elapsedTime = Date.now() - startTime;
