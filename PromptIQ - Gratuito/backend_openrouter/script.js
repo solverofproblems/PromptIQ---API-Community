@@ -20,52 +20,75 @@ app.get('/health', async (req, res) => {
     console.log(`📝 Prompt: "${prompt}"`);
     
     // ÚNICA requisição à API - tudo em uma chamada
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
+const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
         "Authorization": `Bearer ${process.env.OPENROUTER_API}`,
         "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+    },
+    body: JSON.stringify({
         model: "deepseek/deepseek-chat-v3.1:free",
         messages: [
-          {
+            {
             "role": "system",
-            "content": `Você é um avaliador de prompts para IA. Avalie rigorosamente e seja direto.
+            "content": `You are a STRICT prompt evaluator for AI. Be VERY RIGOROUS and realistic in your scoring. Do NOT be generous with points.
 
-REGRA OBRIGATÓRIA: 
-- Se o prompt estiver em INGLÊS, responda em INGLÊS
-- Se o prompt estiver em ESPANHOL, responda em ESPANHOL  
-- Se o prompt estiver em FRANCÊS, responda em FRANCÊS
-- Se o prompt estiver em PORTUGUÊS, responda em PORTUGUÊS
-- Se o prompt estiver em OUTRO IDIOMA, responda no MESMO idioma
+CRITICAL: You MUST respond in the EXACT same language as the user's prompt.
 
-PONTUAÇÃO (0-100):
-- 90-100: Excepcional (específico, claro, objetivo)
-- 80-89: Muito bom (bem estruturado)
-- 70-79: Bom (claro, mas pode melhorar)
-- 60-69: Regular (básico, funcional)
-- 50-59: Fraco (genérico, pouco específico)
-- 40-49: Ruim (confuso ou vago)
-- 30-39: Muito ruim (mal estruturado)
-- 20-29: Péssimo (quase inútil)
-- 10-19: Terrível (incompreensível)
-- 0-9: Inaceitável
+EVALUATION RULES:
+- Be extremely strict with scoring
+- Most prompts should score between 20-60 points
+- Only truly exceptional prompts should score above 80
+- Penalize heavily for vague, generic, or poorly structured prompts
+- Consider context, specificity, clarity, and professional structure
 
-RESUMO: Uma frase direta sobre o prompt (OBRIGATORIAMENTE no mesmo idioma do prompt).
-COMENTÁRIO: Explicação concisa da nota (máximo 2 frases, OBRIGATORIAMENTE no mesmo idioma).
+EXAMPLES:
+- If user writes in English: "Write a story" → Respond in English
+- If user writes in Spanish: "Escribe una historia" → Respond in Spanish  
+- If user writes in French: "Écris une histoire" → Respond in French
+- If user writes in Portuguese: "Escreva uma história" → Respond in Portuguese
 
-Responda APENAS com JSON válido:
-{"resumo": "resumo em uma frase no idioma do prompt", "pontuacao": {"nota": X, "comentario": "explicação concisa da nota no mesmo idioma"}}`
+SCORING (0-100) - BE VERY STRICT AND REALISTIC:
+- 90-100: Exceptional (highly specific, detailed context, clear objectives, professional structure)
+- 80-89: Very good (well-structured, specific, but minor improvements possible)
+- 70-79: Good (clear and functional, but lacks specificity or context)
+- 60-69: Regular (basic and functional, but generic and lacks detail)
+- 50-59: Weak (too generic, lacks specificity, minimal context)
+- 40-49: Poor (vague, confusing, lacks clear objectives)
+- 30-39: Very poor (poorly structured, unclear, minimal effort)
+- 20-29: Terrible (almost useless, very vague, no context)
+- 10-19: Awful (incomprehensible, no clear purpose)
+- 0-9: Unacceptable (completely useless)
+
+STRICT PENALTIES:
+- 1-2 word prompts: Maximum 15 points
+- Generic requests like "help me", "I want", "I need" without context: Maximum 25 points
+- Vague requests without specifics: Maximum 35 points
+- No clear objective or purpose: Maximum 40 points
+- Poor grammar or structure: -10 to -20 points
+- No context provided: -15 points
+- Too informal language: -5 to -10 points
+
+SUMMARY: One direct sentence about the prompt (in the SAME language as the prompt).
+COMMENT: Concise explanation of the score (max 2 sentences, in the SAME language as the prompt).
+
+Respond ONLY with valid JSON:
+{"resumo": "summary in one sentence in the prompt's language", "pontuacao": {"nota": X, "comentario": "concise explanation of the score in the prompt's language"}}`
           },
           {
             "role": "user", 
-            "content": `Avalie rigorosamente este prompt e responda no MESMO idioma do prompt: ${prompt}`
+            "content": `Evaluate this prompt and respond in the EXACT same language as the prompt. Examples:
+- English prompt → English response
+- Spanish prompt → Spanish response  
+- French prompt → French response
+- Portuguese prompt → Portuguese response
+
+Prompt to evaluate: ${prompt}`
           }
         ],
         temperature: 0.1
-      })
-    });
+    })
+});
 
     const data = await response.json();
     
@@ -114,17 +137,20 @@ Responda APENAS com JSON válido:
       console.error("❌ Erro ao fazer parse do JSON:", parseError);
       console.log("📝 Conteúdo problemático:", content);
       
-      // Criar resposta de fallback simples
+      // Criar resposta de fallback rigorosa
       const promptLength = prompt.length;
-      let fallbackScore = Math.max(10, Math.min(50, promptLength * 2));
+      let fallbackScore = Math.max(5, Math.min(35, promptLength * 1.5));
       let fallbackComment = "Prompt básico sem especificações adequadas";
       
       if (promptLength < 10) {
-        fallbackScore = 15;
-        fallbackComment = "Prompt muito curto e vago";
+        fallbackScore = 8;
+        fallbackComment = "Prompt muito curto e vago - pontuação baixa";
       } else if (promptLength < 30) {
-        fallbackScore = 25;
-        fallbackComment = "Prompt curto, precisa de mais detalhes";
+        fallbackScore = 18;
+        fallbackComment = "Prompt curto, precisa de mais detalhes e contexto";
+      } else if (promptLength < 50) {
+        fallbackScore = 28;
+        fallbackComment = "Prompt básico, mas falta especificidade";
       }
       
       respostaJson = {
