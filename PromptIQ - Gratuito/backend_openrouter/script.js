@@ -27,7 +27,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
-        model: "qwen/qwen3-235b-a22b:free",
+        model: "mistralai/mistral-7b-instruct:free",
         messages: [
             {
             "role": "system",
@@ -67,7 +67,7 @@ Prompt: ${prompt}`
       throw new Error(`API Error: ${data.error?.message || 'Unknown error'}`);
     }
 
-    console.log(`✅ Requisição única concluída - modelo: deepseek/deepseek-chat-v3.1:free`);
+    console.log(`✅ Requisição única concluída - modelo: mistralai/mistral-7b-instruct:free`);
     
     // Extrair e limpar o conteúdo da resposta
     let content = data.choices[0].message.content;
