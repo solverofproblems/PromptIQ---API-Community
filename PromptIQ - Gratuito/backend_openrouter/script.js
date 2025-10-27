@@ -89,7 +89,7 @@ Responda no mesmo idioma do prompt.`
       throw new Error(`API Error: ${data.error?.message || 'Unknown error'}`);
     }
 
-    console.log(`✅ Requisição única concluída - modelo: tngtech/deepseek-r1t2-chimera:free`);
+    console.log(`✅ Análise concluída - modelo: tngtech/deepseek-r1t2-chimera:free`);
     
     // Extrair e limpar o conteúdo da resposta
     let content = data.choices[0].message.content;
@@ -156,7 +156,7 @@ Responda no mesmo idioma do prompt.`
     }
     
     // Garantir que a resposta tenha a estrutura correta
-    const finalResponse = {
+    let finalResponse = {
       resumo: respostaJson.resumo || "Análise não disponível no momento",
       pontuacao: {
         nota: respostaJson.pontuacao?.nota || 0,
@@ -164,8 +164,92 @@ Responda no mesmo idioma do prompt.`
       }
     };
     
+    // Detectar idioma do prompt (se for português, corrigir ortografia com Mistral)
+    const promptLower = prompt.toLowerCase();
+    const isPortuguese = /[àáâãéêíóôõúç]/.test(promptLower) || 
+                         promptLower.includes('ão') || 
+                         promptLower.includes('ção') ||
+                         promptLower.split(' ').some(word => ['o', 'a', 'de', 'do', 'da', 'em', 'para', 'com'].includes(word));
+    
+    // Se for português, corrigir ortografia com Mistral
+    if (isPortuguese && respostaJson.resumo && respostaJson.pontuacao?.comentario) {
+      console.log(`🔤 Corrigindo ortografia em português com Mistral...`);
+      
+      try {
+        const correctionResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${process.env.OPENROUTER_API}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "mistralai/mistral-7b-instruct:free",
+            messages: [
+              {
+                "role": "system",
+                "content": `Você corrige erros ortográficos em português. Retorne APENAS o texto corrigido, sem explicações.`
+              },
+              {
+                "role": "user",
+                "content": `Corrija a ortografia deste texto em português:
+
+RESUMO: ${finalResponse.resumo}
+COMENTÁRIO: ${finalResponse.pontuacao.comentario}
+
+Retorne no formato JSON:
+{"resumo": "texto corrigido", "comentario": "texto corrigido"}`
+              }
+            ],
+            temperature: 0.1
+          })
+        });
+        
+        const correctionData = await correctionResponse.json();
+        
+        if (correctionResponse.ok && correctionData.choices && correctionData.choices[0]) {
+          let correctionContent = correctionData.choices[0].message.content.trim();
+          
+          // Limpar markdown se presente
+          if (correctionContent.includes('```json')) {
+            const jsonMatch = correctionContent.match(/```json\s*([\s\S]*?)\s*```/);
+            if (jsonMatch) correctionContent = jsonMatch[1].trim();
+          } else if (correctionContent.includes('```')) {
+            const jsonMatch = correctionContent.match(/```\s*([\s\S]*?)\s*```/);
+            if (jsonMatch) correctionContent = jsonMatch[1].trim();
+          }
+          
+          // Extrair JSON
+          const jsonStart = correctionContent.indexOf('{');
+          const jsonEnd = correctionContent.lastIndexOf('}');
+          
+          if (jsonStart !== -1 && jsonEnd !== -1) {
+            correctionContent = correctionContent.substring(jsonStart, jsonEnd + 1);
+            const correctedJson = JSON.parse(correctionContent);
+            
+            // Aplicar correções mantendo a nota original
+            finalResponse.resumo = correctedJson.resumo || finalResponse.resumo;
+            finalResponse.pontuacao.comentario = correctedJson.comentario || finalResponse.pontuacao.comentario;
+            
+            console.log(`✅ Ortografia corrigida com sucesso`);
+            console.log(`   📝 Resumo antes: ${respostaJson.resumo}`);
+            console.log(`   📝 Resumo depois: ${finalResponse.resumo}`);
+            console.log(`   💬 Comentário antes: ${respostaJson.pontuacao.comentario}`);
+            console.log(`   💬 Comentário depois: ${finalResponse.pontuacao.comentario}`);
+          }
+        }
+      } catch (correctionError) {
+        console.log(`⚠️ Erro na correção ortográfica, usando texto original`);
+        // Em caso de erro, usar o texto original
+      }
+    }
+    
+    // Log para debug - verificar dados antes de enviar
+    console.log(`📤 Enviando para frontend:`);
+    console.log(`   - Resumo: ${finalResponse.resumo}`);
+    console.log(`   - Nota: ${finalResponse.pontuacao.nota}`);
+    console.log(`   - Comentário: ${finalResponse.pontuacao.comentario}`);
+    
     res.json(finalResponse);
-    console.log(`📊 Resultado: ${finalResponse.pontuacao.nota} pontos`);
     
   } catch (error) {
     console.error("❌ Erro na análise:", error);
