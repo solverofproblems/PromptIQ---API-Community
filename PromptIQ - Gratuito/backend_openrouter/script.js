@@ -31,9 +31,9 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         messages: [
             {
             "role": "system",
-            "content": `Avalie este prompt de forma rigorosa. Responda no MESMO idioma do prompt.
+            "content": `Avalie este prompt de forma rigorosa. Responda no MESMO idioma do prompt, ou seja, se for em português, responda em português, e assim por diante.
 
-CRÍTICO: Use gramática perfeita, ortografia correta e estrutura coerente. NÃO cometa erros.
+CRÍTICO: Forneça uma resposta clara e objetiva, além de gramaticalmente correta e direta.
 
 PONTUAÇÃO RIGOROSA (0-100):
 - 90-100: Excepcional (específico, contexto detalhado, objetivos claros)
@@ -52,12 +52,12 @@ FORMATO (JSON apenas):
           },
           {
             "role": "user", 
-            "content": `Avalie e responda no MESMO idioma do prompt. Use gramática perfeita e ortografia correta.
+            "content": `Avalie e responda no MESMO idioma do prompt. Sobre a resposta, responda de forma clara e objetiva, além de gramaticalmente correta, evitando falhas de escrita.
 
 Prompt: ${prompt}`
           }
         ],
-        temperature: 0.1
+        temperature: 0.0
     })
 });
 
