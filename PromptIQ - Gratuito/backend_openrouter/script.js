@@ -27,7 +27,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
-        model: "mistralai/mistral-7b-instruct:free",
+        model: "tngtech/deepseek-r1t2-chimera:free",
         messages: [
             {
             "role": "system",
@@ -89,7 +89,7 @@ Responda no mesmo idioma do prompt.`
       throw new Error(`API Error: ${data.error?.message || 'Unknown error'}`);
     }
 
-    console.log(`✅ Requisição única concluída - modelo: mistralai/mistral-7b-instruct:free`);
+    console.log(`✅ Requisição única concluída - modelo: tngtech/deepseek-r1t2-chimera:free`);
     
     // Extrair e limpar o conteúdo da resposta
     let content = data.choices[0].message.content;
