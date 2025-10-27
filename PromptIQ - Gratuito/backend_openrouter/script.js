@@ -31,30 +31,52 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         messages: [
             {
             "role": "system",
-            "content": `Avalie este prompt de forma rigorosa. Responda no MESMO idioma do prompt, ou seja, se for em português, responda em português, e assim por diante.
+            "content": `Você avalia prompts para IA.
 
-CRÍTICO: Forneça uma resposta clara e objetiva, além de gramaticalmente correta e direta.
+REGRAS:
+1. Responda no MESMO idioma do prompt
+2. Use gramática correta
+3. Seja objetivo e claro
 
-PONTUAÇÃO RIGOROSA (0-100):
-- 90-100: Excepcional (específico, contexto detalhado, objetivos claros)
-- 80-89: Muito bom (bem estruturado e específico)
-- 70-79: Bom (claro mas falta especificidade)
-- 60-69: Regular (básico, genérico, falta detalhes)
-- 50-59: Fraco (genérico, contexto mínimo)
-- 40-49: Ruim (vago, confuso)
-- 30-39: Muito ruim (mal estruturado)
-- 20-29: Terrível (quase inútil)
-- 10-19: Péssimo (incompreensível)
-- 0-9: Inaceitável
+PONTUAÇÃO:
+- 90-100: Excelente (muito específico e detalhado)
+- 80-89: Muito bom (bem feito)
+- 70-79: Bom (funciona, mas pode melhorar)
+- 60-69: Regular (básico demais)
+- 50-59: Fraco (genérico)
+- 40-49: Ruim (confuso)
+- 30-39: Muito ruim
+- 20-29: Terrível
+- 10-19: Péssimo
+- 0-9: Muito ruim
 
-FORMATO (JSON apenas):
-{"resumo": "Uma frase sobre o prompt no mesmo idioma", "pontuacao": {"nota": X, "comentario": "Explicação da pontuação no mesmo idioma (max 2 frases)"}}`
+IMPORTANTE: Retorne APENAS um JSON válido, sem texto adicional.
+
+FORMATO:
+{
+  "resumo": "frase sobre o prompt no mesmo idioma",
+  "pontuacao": {
+    "nota": número_entre_0_e_100,
+    "comentario": "explicação no mesmo idioma, máximo 2 frases"
+  }
+}
+
+EXEMPLO:
+"Quero um bolo" → {
+  "resumo": "Solicitação genérica de receita sem especificações",
+  "pontuacao": {
+    "nota": 18,
+    "comentario": "Prompt muito vago, não especifica tipo de bolo, tamanho ou ingredientes preferidos"
+  }
+}`
           },
           {
             "role": "user", 
-            "content": `Avalie e responda no MESMO idioma do prompt. Sobre a resposta, responda de forma clara e objetiva, além de gramaticalmente correta, evitando falhas de escrita.
+            "content": `Avalie este prompt:
 
-Prompt: ${prompt}`
+${prompt}
+
+Responda no mesmo idioma do prompt.`
           }
         ],
         temperature: 0.5
