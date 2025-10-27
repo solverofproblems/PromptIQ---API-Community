@@ -31,63 +31,30 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         messages: [
             {
             "role": "system",
-            "content": `Você é um avaliador RIGOROSO de prompts para IA. Seja MUITO RIGOROSO e realista na sua pontuação. NÃO seja generoso com pontos.
+            "content": `Avalie este prompt de forma rigorosa. Responda no MESMO idioma do prompt.
 
-CRÍTICO: Você DEVE responder no MESMO idioma exato do prompt do usuário.
+CRÍTICO: Use gramática perfeita, ortografia correta e estrutura coerente. NÃO cometa erros.
 
-REGRAS DE AVALIAÇÃO:
-- Seja extremamente rigoroso com a pontuação
-- A maioria dos prompts deve pontuar entre 20-60 pontos
-- Apenas prompts verdadeiramente excepcionais devem pontuar acima de 80
-- Penalize severamente prompts vagos, genéricos ou mal estruturados
-- Considere contexto, especificidade, clareza e estrutura profissional
+PONTUAÇÃO RIGOROSA (0-100):
+- 90-100: Excepcional (específico, contexto detalhado, objetivos claros)
+- 80-89: Muito bom (bem estruturado e específico)
+- 70-79: Bom (claro mas falta especificidade)
+- 60-69: Regular (básico, genérico, falta detalhes)
+- 50-59: Fraco (genérico, contexto mínimo)
+- 40-49: Ruim (vago, confuso)
+- 30-39: Muito ruim (mal estruturado)
+- 20-29: Terrível (quase inútil)
+- 10-19: Péssimo (incompreensível)
+- 0-9: Inaceitável
 
-EXEMPLOS DE IDIOMAS:
-- Se o usuário escreve em inglês: "Write a story" → Responda em inglês
-- Se o usuário escreve em espanhol: "Escribe una historia" → Responda em espanhol  
-- Se o usuário escreve em francês: "Écris une histoire" → Responda em francês
-- Se o usuário escreve em português: "Escreva uma história" → Responda em português
-
-PONTUAÇÃO (0-100) - SEJA MUITO RIGOROSO E REALISTA:
-- 90-100: Excepcional (altamente específico, contexto detalhado, objetivos claros, estrutura profissional)
-- 80-89: Muito bom (bem estruturado, específico, mas com melhorias menores possíveis)
-- 70-79: Bom (claro e funcional, mas falta especificidade ou contexto)
-- 60-69: Regular (básico e funcional, mas genérico e falta detalhes)
-- 50-59: Fraco (muito genérico, falta especificidade, contexto mínimo)
-- 40-49: Ruim (vago, confuso, falta objetivos claros)
-- 30-39: Muito ruim (mal estruturado, pouco claro, esforço mínimo)
-- 20-29: Terrível (quase inútil, muito vago, sem contexto)
-- 10-19: Péssimo (incompreensível, sem propósito claro)
-- 0-9: Inaceitável (completamente inútil)
-
-PENALIDADES RIGOROSAS:
-- Prompts de 1-2 palavras: Máximo 15 pontos
-- Solicitações genéricas como "ajude-me", "eu quero", "eu preciso" sem contexto: Máximo 25 pontos
-- Solicitações vagas sem especificidades: Máximo 35 pontos
-- Sem objetivo ou propósito claro: Máximo 40 pontos
-- Gramática ou estrutura ruim: -10 a -20 pontos
-- Nenhum contexto fornecido: -15 pontos
-- Linguagem muito informal: -5 a -10 pontos
-
-RESUMO: Uma frase direta sobre o prompt (no MESMO idioma do prompt).
-COMENTÁRIO: Explicação concisa da pontuação (máximo 2 frases, no MESMO idioma do prompt).
-
-IMPORTANTE: Use gramática perfeita, ortografia correta e estrutura coerente em TODAS as suas respostas.
-
-Responda APENAS com JSON válido:
-{"resumo": "resumo em uma frase no idioma do prompt", "pontuacao": {"nota": X, "comentario": "explicação concisa da pontuação no idioma do prompt"}}`
+FORMATO (JSON apenas):
+{"resumo": "Uma frase sobre o prompt no mesmo idioma", "pontuacao": {"nota": X, "comentario": "Explicação da pontuação no mesmo idioma (max 2 frases)"}}`
           },
           {
             "role": "user", 
-            "content": `Avalie este prompt e responda no MESMO idioma exato do prompt. Exemplos:
-- Prompt em inglês → Resposta em inglês
-- Prompt em espanhol → Resposta em espanhol  
-- Prompt em francês → Resposta em francês
-- Prompt em português → Resposta em português
+            "content": `Avalie e responda no MESMO idioma do prompt. Use gramática perfeita e ortografia correta.
 
-IMPORTANTE: Use gramática perfeita, ortografia correta e estrutura coerente na sua resposta.
-
-Prompt para avaliar: ${prompt}`
+Prompt: ${prompt}`
           }
         ],
         temperature: 0.1
