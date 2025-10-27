@@ -27,7 +27,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
-        model: "deepseek/deepseek-chat-v3.1:free",
+        model: "qwen/qwen3-235b-a22b:free",
         messages: [
             {
             "role": "system",
