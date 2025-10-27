@@ -57,7 +57,7 @@ FORMATO (JSON apenas):
 Prompt: ${prompt}`
           }
         ],
-        temperature: 0.0
+        temperature: 0.5
     })
 });
 
